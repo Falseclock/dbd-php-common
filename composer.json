@@ -1,0 +1,34 @@
+{
+  "name": "falseclock/dbd-php-common",
+  "type": "library",
+  "description": "Common libraries for PHP Database driver and Entities annotation",
+  "keywords": [
+    "dbd",
+    "singleton",
+    "instantiatable",
+    "database"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nurlan Mukhanov",
+      "email": "nurike@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1"
+  },
+  "require-dev": {
+  },
+  "suggest": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Falseclock\\DBD\\Common\\": "src/"
+    }
+  },
+  "autoload-dev": {
+  },
+  "config": {
+  }
+}
