@@ -27,7 +27,7 @@ namespace Falseclock\DBD\Common;
 
 use Exception;
 
-class DBDPHPException extends Exception
+class DBDException extends Exception
 {
     protected $query;
     protected $trace;
