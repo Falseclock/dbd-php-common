@@ -188,7 +188,7 @@ class Utils
 				LEFT JOIN pg_index i ON i.indrelid = ?::regclass::oid
 			WHERE
 				cols.table_name = ? AND
-				cols.table_schema = ?'
+				cols.table_schema = ?
 			ORDER BY
 				ordinal_position
 		"
@@ -209,7 +209,7 @@ class Utils
 				}
 
 				if(isset($row['is_primary'])) {
-					if($row['is_primary'] == 'f' || $row['is_primary'] == false)
+					if($row['is_primary'] === 'f' or $row['is_primary'] === false)
 						$column->key = false;
 					else
 						$column->key = true;
