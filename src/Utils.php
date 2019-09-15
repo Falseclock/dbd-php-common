@@ -145,22 +145,10 @@ class Utils
 	 * @throws ReflectionException
 	 */
 	private static function pgTableStructure(DBD $db, string $table, string $schema) {
-		// Postgres uses dot symbol to separate schema and table
-		if(!isset($schema)) {
-			//Get the first occurrence of a character.
-			$dotPosition = strpos($table, '.');
-			if($dotPosition === false) {
-				throw new Exception("No schema provided");
-			}
-			$initialTable = $table;
-			$schema = substr($initialTable, 0, $dotPosition);
-			$table = substr($initialTable, $dotPosition + 1);
-		}
-		$regClass = "{$schema}.{$table}";
 
 		$sth = $db->prepare("
 			SELECT
-				CASE WHEN ordinal_position = ANY(i.indkey) THEN TRUE ELSE FALSE END as is_primary,
+				CASE WHEN ordinal_position = ANY (i.indkey) THEN TRUE ELSE FALSE END                     AS is_primary,
 				ordinal_position,
 				cols.column_name,
 				CASE WHEN is_nullable = 'NO' THEN FALSE WHEN is_nullable = 'YES' THEN TRUE ELSE NULL END AS is_nullable,
@@ -171,18 +159,18 @@ class Utils
 				numeric_scale,
 				datetime_precision,
 				column_default,
-				pg_catalog.col_description(?::regclass::oid, cols.ordinal_position::INT)
+				pg_catalog.col_description(CONCAT(cols.table_schema, '.', cols.table_name)::REGCLASS::OID, cols.ordinal_position::INT) AS column_comment
 			FROM
 				information_schema.columns cols
-				LEFT JOIN pg_index i ON i.indrelid = ?::regclass::oid
+				LEFT JOIN pg_index i ON i.indrelid = CONCAT(cols.table_schema, '.', cols.table_name)::REGCLASS::OID AND i.indisprimary
 			WHERE
 				cols.table_name = ? AND
 				cols.table_schema = ?
 			ORDER BY
-				ordinal_position
+				ordinal_position;
 		"
 		);
-		$sth->execute($regClass, $regClass, $table, $schema);
+		$sth->execute($table, $schema);
 
 		if($sth->rows()) {
 			$columns = [];
