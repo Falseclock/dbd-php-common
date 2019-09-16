@@ -7,6 +7,7 @@ use DBD\Pg;
 use Falseclock\DBD\Common\DBDException as Exception;
 use Falseclock\DBD\Entity\Column;
 use Falseclock\DBD\Entity\Primitive;
+use Falseclock\DBD\Entity\Table;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 
@@ -29,7 +30,7 @@ class Utils
 	 * @param string $table
 	 * @param string $scheme
 	 *
-	 * @return Column[]
+	 * @return Table
 	 * @throws Exception
 	 * @throws InvalidArgumentException
 	 * @throws ReflectionException
@@ -136,15 +137,19 @@ class Utils
 
 	/**
 	 * @param DBD    $db
-	 * @param string $table
-	 * @param string $schema
+	 * @param string $tableName
+	 * @param string $schemaName
 	 *
-	 * @return Column[]
+	 * @return Table
 	 * @throws Exception
 	 * @throws InvalidArgumentException
 	 * @throws ReflectionException
 	 */
-	private static function pgTableStructure(DBD $db, string $table, string $schema) {
+	private static function pgTableStructure(DBD $db, string $tableName, string $schemaName) {
+
+		$table = new Table();
+
+		$table->annotation = $db->select("SELECT obj_description(CONCAT(?::text, '.', ?::text)::REGCLASS)", $schemaName, $tableName);
 
 		$sth = $db->prepare("
 			SELECT
@@ -167,10 +172,10 @@ class Utils
 				cols.table_name = ? AND
 				cols.table_schema = ?
 			ORDER BY
-				ordinal_position;
+				ordinal_position
 		"
 		);
-		$sth->execute($table, $schema);
+		$sth->execute($tableName, $schemaName);
 
 		if($sth->rows()) {
 			$columns = [];
@@ -183,13 +188,6 @@ class Utils
 						$column->nullable = false;
 					else
 						$column->nullable = false;
-				}
-
-				if(isset($row['is_primary'])) {
-					if($row['is_primary'] === 'f' or $row['is_primary'] === false)
-						$column->key = false;
-					else
-						$column->key = true;
 				}
 
 				if(isset($row['character_maximum_length']))
@@ -217,12 +215,22 @@ class Utils
 					$column->precision = null;
 				}
 
+				if(isset($row['is_primary'])) {
+					if($row['is_primary'] === 'f' or $row['is_primary'] === false) {
+						$column->key = false;
+					}
+					else {
+						$column->key = true;
+						$table->keys[] = $column;
+					}
+				}
+
 				$columns[] = $column;
 			}
 
-			return $columns;
+			$table->columns = $columns;
 		}
 
-		return [];
+		return $table;
 	}
 }
