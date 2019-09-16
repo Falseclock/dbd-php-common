@@ -11,7 +11,7 @@
 
 namespace Falseclock\DBD\Common;
 
-use Falseclock\DBD\Common\DBDException as Exception;
+use Exception;
 
 abstract class Singleton implements Instantiatable
 {
