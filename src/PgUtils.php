@@ -235,6 +235,7 @@ class PgUtils implements DBDUtils
 					$column->annotation = $row['column_comment'];
 
 				$column->type = self::getPrimitive($row['udt_name']);
+				$column->originType = $row['udt_name'];
 
 				if(in_array($column->type->getValue(), [ Primitive::Int16, Primitive::Int32(), Primitive::Int64 ])) {
 					$column->scale = null;
