@@ -19,12 +19,11 @@ interface DBDUtils
 	function getPrimitive(string $type);
 
 	/**
-	 * @param string $tableName
-	 * @param string $schemaName
+	 * @param Table $table
 	 *
 	 * @return Constraint[]
 	 */
-	function getTableConstraints(string $tableName, string $schemaName);
+	function getTableConstraints(Table $table);
 
 	/**
 	 * @param string $tableName

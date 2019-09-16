@@ -15,6 +15,11 @@ class PgUtils implements DBDUtils
 	/** @var DBD $db */
 	private $db;
 
+	/**
+	 * PgUtils constructor.
+	 *
+	 * @param DBD $dbDriver
+	 */
 	public function __construct(DBD $dbDriver) {
 		$this->db = $dbDriver;
 	}
@@ -110,15 +115,14 @@ class PgUtils implements DBDUtils
 	}
 
 	/**
-	 * @param string $tableName
-	 * @param string $schemaName
+	 * @param Table $table
 	 *
 	 * @return Constraint[]
 	 * @throws DBDException
 	 * @throws InvalidArgumentException
 	 * @throws ReflectionException
 	 */
-	public function getTableConstraints(string $tableName, string $schemaName) {
+	public function getTableConstraints(Table $table) {
 		$constraints = [];
 		$sth = $this->db->prepare("
 			SELECT
@@ -140,10 +144,17 @@ class PgUtils implements DBDUtils
 				tc.table_schema = ?
 		"
 		);
-		$sth->execute($tableName, $schemaName);
+		$sth->execute($table->name, $table->scheme);
 
 		if($sth->rows()) {
+			while($row = $sth->fetchRow()) {
+				$constraint = new Constraint();
+				$constraint->column = $this->getColumnByName($table->columns, $row['column_name']);
+				$constraint->foreignTable = $this->tableStructure($row['foreign_table_name'], $row['foreign_table_schema']);
+				$constraint->foreignColumn = $this->getColumnByName($constraint->foreignTable->columns, $row['foreign_column_name']);
 
+				$constraints[] = $constraint;
+			}
 		}
 
 		return $constraints;
@@ -161,8 +172,10 @@ class PgUtils implements DBDUtils
 	public function tableStructure(string $tableName, string $schemaName) {
 
 		$table = new Table();
+		$table->name = $tableName;
+		$table->scheme = $schemaName;
 
-		$table->annotation = $this->db->select("SELECT obj_description(CONCAT(?::text, '.', ?::text)::REGCLASS)", $schemaName, $tableName);
+		$table->annotation = $this->db->select("SELECT obj_description(CONCAT(?::text, '.', ?::text)::REGCLASS)", $table->scheme, $table->name);
 
 		$sth = $this->db->prepare("
 			SELECT
@@ -188,7 +201,7 @@ class PgUtils implements DBDUtils
 				ordinal_position
 		"
 		);
-		$sth->execute($tableName, $schemaName);
+		$sth->execute($table->name, $table->scheme);
 
 		if($sth->rows()) {
 			$columns = [];
@@ -242,8 +255,26 @@ class PgUtils implements DBDUtils
 			}
 
 			$table->columns = $columns;
+
+			$table->constraints = $this->getTableConstraints($table);
 		}
 
 		return $table;
+	}
+
+	/**
+	 * @param Column[] $columns
+	 * @param          $name
+	 *
+	 * @return Column
+	 * @throws DBDException
+	 */
+	private function getColumnByName(iterable $columns, $name): Column {
+		foreach($columns as $column) {
+			if($column->name == $name) {
+				return $column;
+			}
+		}
+		throw  new DBDException("Unknown column {$name}");
 	}
 }
