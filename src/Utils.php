@@ -11,6 +11,14 @@ use ReflectionException;
 
 class Utils
 {
+	/**
+	 * Converts to Camel Case
+	 *
+	 * @param      $string
+	 * @param bool $capitalizeFirstCharacter
+	 *
+	 * @return string
+	 */
 	public static function dashesToCamelCase($string, $capitalizeFirstCharacter = false) {
 		$str = str_replace('_', '', ucwords($string, '_'));
 
