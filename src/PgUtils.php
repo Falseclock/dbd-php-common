@@ -108,6 +108,7 @@ class PgUtils implements DBDUtils
 			case 'tsquery':
 			case 'tsvector':
 			case 'xml':
+			case 'bpchar':
 				return Primitive::String();
 				break;
 		}
@@ -138,7 +139,7 @@ class PgUtils implements DBDUtils
 						 AND tc.table_schema = kcu.table_schema
 				JOIN information_schema.constraint_column_usage AS ccu
 					 ON ccu.constraint_name = tc.constraint_name
-						 AND ccu.table_schema = tc.table_schema
+						 --AND ccu.table_schema = tc.table_schema
 			WHERE
 				tc.constraint_type = 'FOREIGN KEY' AND
 				tc.table_name = ? AND
@@ -150,8 +151,14 @@ class PgUtils implements DBDUtils
 		if($sth->rows()) {
 			while($row = $sth->fetchRow()) {
 				$constraint = new Constraint();
-				$constraint->column = $this->getColumnByName($table->columns, $row['column_name']);
-				$constraint->foreignTable = $this->tableStructure($row['foreign_table_name'], $row['foreign_table_schema']);
+				$constraint->localColumn = $this->getColumnByName($table->columns, $row['column_name']);
+				// If table refers itself
+				if($table->name == $row['foreign_table_name'] and $table->scheme == $row['foreign_table_schema']) {
+					$constraint->foreignTable = $table;
+				}
+				else {
+					$constraint->foreignTable = $this->tableStructure($row['foreign_table_name'], $row['foreign_table_schema']);
+				}
 				$constraint->foreignColumn = $this->getColumnByName($constraint->foreignTable->columns, $row['foreign_column_name']);
 
 				$constraints[] = $constraint;
