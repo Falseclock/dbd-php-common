@@ -14,13 +14,15 @@ class Utils
 	/**
 	 * Converts to Camel Case
 	 *
-	 * @param      $string
-	 * @param bool $capitalizeFirstCharacter
+	 * @param       $string
+	 * @param bool  $capitalizeFirstCharacter
+	 *
+	 * @param array $search
 	 *
 	 * @return string
 	 */
-	public static function dashesToCamelCase($string, $capitalizeFirstCharacter = false) {
-		$str = str_replace('_', '', ucwords($string, '_'));
+	public static function toCamelCase($string, $capitalizeFirstCharacter = false, array $search = [ '_' ]) {
+		$str = str_replace($search, '', ucwords($string, implode("", $search)));
 
 		if(!$capitalizeFirstCharacter) {
 			$str = lcfirst($str);
