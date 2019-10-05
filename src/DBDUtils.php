@@ -2,7 +2,7 @@
 
 namespace Falseclock\DBD\Common;
 
-use DBD\DBD;
+use Falseclock\DBD\DBD;
 use Falseclock\DBD\Entity\Constraint;
 use Falseclock\DBD\Entity\Primitive;
 use Falseclock\DBD\Entity\Table;

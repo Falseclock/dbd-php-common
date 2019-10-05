@@ -2,10 +2,10 @@
 
 namespace Falseclock\DBD\Common;
 
-use DBD\DBD;
-use DBD\Pg;
 use Falseclock\DBD\Common\DBDException as Exception;
+use Falseclock\DBD\DBD;
 use Falseclock\DBD\Entity\Table;
+use Falseclock\DBD\Pg;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 
