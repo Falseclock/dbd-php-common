@@ -1,13 +1,13 @@
 <?php
 
-namespace Falseclock\DBD\Common;
+namespace DBD\Common;
 
-use Falseclock\DBD\DBD;
-use Falseclock\DBD\Entity\Column;
-use Falseclock\DBD\Entity\Constraint;
-use Falseclock\DBD\Entity\Key;
-use Falseclock\DBD\Entity\Primitive;
-use Falseclock\DBD\Entity\Table;
+use DBD\DBD;
+use DBD\Entity\Column;
+use DBD\Entity\Constraint;
+use DBD\Entity\Key;
+use DBD\Entity\Primitive;
+use DBD\Entity\Table;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 

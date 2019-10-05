@@ -1,11 +1,11 @@
 <?php
 
-namespace Falseclock\DBD\Common;
+namespace DBD\Common;
 
-use Falseclock\DBD\Common\DBDException as Exception;
-use Falseclock\DBD\DBD;
-use Falseclock\DBD\Entity\Table;
-use Falseclock\DBD\Pg;
+use DBD\Common\DBDException as Exception;
+use DBD\DBD;
+use DBD\Entity\Table;
+use DBD\Pg;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 

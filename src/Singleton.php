@@ -9,7 +9,7 @@
  *                                                                         *
  **************************************************************************/
 
-namespace Falseclock\DBD\Common;
+namespace DBD\Common;
 
 use Exception;
 
