@@ -13,8 +13,8 @@ namespace DBD\Common;
 
 interface Instantiatable
 {
-    /**
-     * @return mixed
-     */
-    public static function me();
+	/**
+	 * @return mixed | static
+	 */
+	public static function me();
 }

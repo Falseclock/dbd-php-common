@@ -6,16 +6,32 @@ use Exception;
 
 class DBDException extends Exception
 {
+	/** @var string $query */
 	protected $query;
+	/** @var array $trace */
 	protected $trace;
+	/** @var array $fullTrace */
 	protected $fullTrace;
+	/** @var array $shortTrace */
 	protected $shortTrace;
+	/** @var string $message */
 	protected $message;
+	/** @var int $code */
 	protected $code;
+	/** @var string $file */
 	protected $file;
+	/** @var int $line */
 	protected $line;
+	/** @var array $arguments */
 	protected $arguments;
 
+	/**
+	 * DBDException constructor.
+	 *
+	 * @param string $message
+	 * @param null   $query
+	 * @param null   $arguments
+	 */
 	public function __construct(string $message = "", $query = null, $arguments = null) {
 		$this->query = $query;
 		$this->message = $message;
@@ -45,18 +61,30 @@ class DBDException extends Exception
 		parent::__construct($message, $this->code);
 	}
 
+	/**
+	 * @return array|null
+	 */
 	public function getArguments() {
 		return $this->arguments;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getFullTrace() {
 		return $this->fullTrace;
 	}
 
+	/**
+	 * @return string|null
+	 */
 	public function getQuery() {
 		return $this->query;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getShortTrace() {
 		return $this->shortTrace;
 	}

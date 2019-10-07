@@ -12,26 +12,6 @@ use ReflectionException;
 class Utils
 {
 	/**
-	 * Converts to Camel Case
-	 *
-	 * @param       $string
-	 * @param bool  $capitalizeFirstCharacter
-	 *
-	 * @param array $search
-	 *
-	 * @return string
-	 */
-	public static function toCamelCase($string, $capitalizeFirstCharacter = false, array $search = [ '_' ]) {
-		$str = str_replace($search, '', ucwords($string, implode("", $search)));
-
-		if(!$capitalizeFirstCharacter) {
-			$str = lcfirst($str);
-		}
-
-		return $str;
-	}
-
-	/**
 	 * Returns structure of table
 	 *
 	 * @param DBD    $db
@@ -53,5 +33,24 @@ class Utils
 			default:
 				throw new Exception("Not implemented for this driver yet");
 		}
+	}
+
+	/**
+	 * Converts to Camel Case
+	 *
+	 * @param       $string
+	 * @param bool  $capitalizeFirstCharacter
+	 * @param array $search
+	 *
+	 * @return string
+	 */
+	public static function toCamelCase($string, $capitalizeFirstCharacter = false, array $search = [ '_' ]) {
+		$str = str_replace($search, '', ucwords($string, implode("", $search)));
+
+		if(!$capitalizeFirstCharacter) {
+			$str = lcfirst($str);
+		}
+
+		return $str;
 	}
 }

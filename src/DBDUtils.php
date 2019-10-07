@@ -9,6 +9,11 @@ use DBD\Entity\Table;
 
 interface DBDUtils
 {
+	/**
+	 * DBDUtils constructor.
+	 *
+	 * @param DBD $dbDriver
+	 */
 	public function __construct(DBD $dbDriver);
 
 	/**
