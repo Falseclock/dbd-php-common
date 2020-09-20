@@ -31,50 +31,40 @@ class PgUtils implements DBDUtils
 	 * @return Primitive
 	 * @throws DBDException
 	 */
-	public function getPrimitive(string $type) {
+	public static function getPrimitive(string $type) {
 		switch(strtolower(trim($type))) {
 
 			case 'bytea':
 				return Primitive::Binary();
-				break;
 
 			case 'boolean':
 			case 'bool':
 				return Primitive::Boolean();
-				break;
 
 			case 'date':
 			case 'timestamp':
 				return Primitive::Date();
-				break;
 
 			case 'timestamptz':
 				return Primitive::DateTimeOffset();
-				break;
-
 			case 'numeric':
 			case 'decimal':
 				return Primitive::Decimal();
-				break;
 
 			case 'float8':
 				return Primitive::Double();
-				break;
 
 			case 'interval':
 				return Primitive::Duration();
-				break;
 
 			case 'uuid':
 				return Primitive::Guid();
-				break;
 
 			case 'int2':
 			case 'smallint':
 			case 'smallserial':
 			case 'serial2':
 				return Primitive::Int16();
-				break;
 
 			case 'int':
 			case 'int4':
@@ -82,19 +72,16 @@ class PgUtils implements DBDUtils
 			case 'serial4':
 			case 'serial':
 				return Primitive::Int32();
-				break;
 
 			case 'int8':
 			case 'bigint':
 			case 'bigserial':
 			case 'serial8':
 				return Primitive::Int64();
-				break;
 
 			case 'float4':
 			case 'real':
 				return Primitive::Single();
-				break;
 
 			case 'varchar':
 			case 'text':
@@ -110,7 +97,6 @@ class PgUtils implements DBDUtils
 			case 'xml':
 			case 'bpchar':
 				return Primitive::String();
-				break;
 		}
 
 		throw new DBDException("Not described type found: {$type}");
@@ -242,7 +228,7 @@ class PgUtils implements DBDUtils
 				if(isset($row['column_comment']))
 					$column->annotation = $row['column_comment'];
 
-				$column->type = self::getPrimitive($row['udt_name']);
+				$column->type = PgUtils::getPrimitive($row['udt_name']);
 				$column->originType = $row['udt_name'];
 
 				if(in_array($column->type->getValue(), [ Primitive::Int16, Primitive::Int32(), Primitive::Int64 ])) {

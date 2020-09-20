@@ -21,7 +21,7 @@ interface DBDUtils
 	 *
 	 * @return Primitive
 	 */
-	function getPrimitive(string $type);
+	public static function getPrimitive(string $type);
 
 	/**
 	 * @param Table $table
