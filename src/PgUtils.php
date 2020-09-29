@@ -45,6 +45,10 @@ class PgUtils implements DBDUtils
 			case 'timestamp':
 				return Primitive::Date();
 
+			case 'time':
+			case 'timetz':
+				return Primitive::TimeOfDay();
+
 			case 'timestamptz':
 				return Primitive::DateTimeOffset();
 			case 'numeric':
