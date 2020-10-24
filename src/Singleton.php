@@ -11,7 +11,7 @@
 
 namespace DBD\Common;
 
-use Exception;
+use DBD\Entity\Common\MapperException;
 
 abstract class Singleton implements Instantiatable
 {
@@ -44,7 +44,7 @@ abstract class Singleton implements Instantiatable
 	 * @param null   $args
 	 *
 	 * @return mixed|Singleton
-	 * @throws Exception
+	 * @throws MapperException
 	 */
 	final public static function getInstance($class, $args = null /* , ... */) {
 		// for Singleton::getInstance('class_name', $arg1, ...) calling
@@ -57,7 +57,7 @@ abstract class Singleton implements Instantiatable
 			$object = $args ? new $class($args) : new $class;
 
 			if(!($object instanceof Singleton)) {
-				throw new Exception("Class '{$class}' is something not a Singleton's child");
+				throw new MapperException("Class '{$class}' is something not a Singleton's child");
 			}
 
 			return self::$instances[$class] = $object;
@@ -69,7 +69,7 @@ abstract class Singleton implements Instantiatable
 
 	/**
 	 * @return mixed|Singleton|static
-	 * @throws Exception
+	 * @throws MapperException
 	 */
 	public static function me() {
 		return self::getInstance(get_called_class());
