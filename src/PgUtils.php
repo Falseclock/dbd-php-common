@@ -8,7 +8,6 @@ use DBD\Entity\Constraint;
 use DBD\Entity\Key;
 use DBD\Entity\Primitive;
 use DBD\Entity\Table;
-use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 
 class PgUtils implements DBDUtils
@@ -111,7 +110,6 @@ class PgUtils implements DBDUtils
 	 *
 	 * @return Constraint[]
 	 * @throws DBDException
-	 * @throws InvalidArgumentException
 	 * @throws ReflectionException
 	 */
 	public function getTableConstraints(Table $table) {
@@ -164,7 +162,6 @@ class PgUtils implements DBDUtils
 	 *
 	 * @return Table
 	 * @throws DBDException
-	 * @throws InvalidArgumentException
 	 * @throws ReflectionException
 	 */
 	public function tableStructure(string $tableName, string $schemaName) {

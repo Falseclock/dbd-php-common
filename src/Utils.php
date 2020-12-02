@@ -6,7 +6,6 @@ use DBD\Common\DBDException as Exception;
 use DBD\DBD;
 use DBD\Entity\Table;
 use DBD\Pg;
-use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 
 class Utils
@@ -20,7 +19,6 @@ class Utils
 	 *
 	 * @return Table
 	 * @throws Exception
-	 * @throws InvalidArgumentException
 	 * @throws ReflectionException
 	 */
 	public static function tableStructure(DBD $db, string $table, string $scheme) {
