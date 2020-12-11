@@ -64,6 +64,9 @@ abstract class Singleton implements Instantiatable
         if (!isset(self::$instances[$class])) {
             $object = $args ? new $class($args) : new $class;
 
+            if (!($object instanceof Singleton))
+                trigger_error("Class '{$class}' is something not a Singleton's child");
+
             return self::$instances[$class] = $object;
         } else {
             return self::$instances[$class];
