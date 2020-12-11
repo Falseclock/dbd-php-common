@@ -2,11 +2,10 @@
 
 namespace DBD\Common;
 
-use DBD\Common\DBDException as Exception;
+use DBD\Common\DBDException;
 use DBD\DBD;
 use DBD\Entity\Table;
 use DBD\Pg;
-use ReflectionException;
 
 class Utils
 {
@@ -18,8 +17,7 @@ class Utils
 	 * @param string $scheme
 	 *
 	 * @return Table
-	 * @throws Exception
-	 * @throws ReflectionException
+	 * @throws DBDException
 	 */
 	public static function tableStructure(DBD $db, string $table, string $scheme) {
 		switch(true) {
@@ -27,9 +25,8 @@ class Utils
 				$utils = new PgUtils($db);
 
 				return $utils->tableStructure($table, $scheme);
-				break;
 			default:
-				throw new Exception("Not implemented for this driver yet");
+				throw new DBDException("Not implemented for this driver yet");
 		}
 	}
 

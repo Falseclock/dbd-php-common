@@ -13,69 +13,67 @@ namespace DBD\Common;
 
 abstract class Singleton implements Instantiatable
 {
-	/**
-	 * Все вызванные ранее инстансы классов
-	 *
-	 * @var array $instances
-	 */
-	private static $instances = [];
+    /**
+     * Все вызванные ранее инстансы классов
+     *
+     * @var array $instances
+     */
+    private static $instances = [];
 
-	/**
-	 * Singleton constructor.
-	 */
-	protected function __construct() {/* you can't create me */
-	}
+    /**
+     * Singleton constructor. You can't create me
+     */
+    protected function __construct()
+    {
+    }
 
-	/**
-	 * Функция возвращает массив всех инстанцированных классов
-	 *
-	 * @return array
-	 */
-	final public static function getAllInstances() {
-		return self::$instances;
-	}
+    /**
+     * Функция возвращает массив всех инстанцированных классов
+     *
+     * @return array
+     */
+    final public static function getAllInstances(): array
+    {
+        return self::$instances;
+    }
 
-	/**
-	 * Функция получения инстанса класса
-	 *
-	 * @param string $class
-	 * @param null   $args
-	 *
-	 * @return mixed|Singleton
-	 * @throws DBDException
-	 */
-	final public static function getInstance($class, $args = null /* , ... */) {
-		// for Singleton::getInstance('class_name', $arg1, ...) calling
-		if(2 < func_num_args()) {
-			$args = func_get_args();
-			array_shift($args);
-		}
+    /**
+     * @return Instantiatable|Singleton|static
+     */
+    public static function me(): Instantiatable
+    {
+        return self::getInstance(get_called_class());
+    }
 
-		if(!isset(self::$instances[$class])) {
-			$object = $args ? new $class($args) : new $class;
+    /**
+     * Функция получения инстанса класса
+     *
+     * @param string $class
+     * @param null $args
+     *
+     * @return Singleton
+     */
+    final public static function getInstance(string $class, $args = null /* , ... */): Singleton
+    {
+        // for Singleton::getInstance('class_name', $arg1, ...) calling
+        if (2 < func_num_args()) {
+            $args = func_get_args();
+            array_shift($args);
+        }
 
-			if(!($object instanceof Singleton)) {
-				throw new DBDException("Class '{$class}' is something not a Singleton's child");
-			}
+        if (!isset(self::$instances[$class])) {
+            $object = $args ? new $class($args) : new $class;
 
-			return self::$instances[$class] = $object;
-		}
-		else {
-			return self::$instances[$class];
-		}
-	}
+            return self::$instances[$class] = $object;
+        } else {
+            return self::$instances[$class];
+        }
+    }
 
-	/**
-	 * @return mixed|Singleton|static
-	 * @throws DBDException
-	 */
-	public static function me() {
-		return self::getInstance(get_called_class());
-	}
-
-	/**
-	 * Функция клонирования классов и их объектов запрещена
-	 */
-	final private function __clone() {/* do not clone me */
-	}
+    /**
+     * do not clone me
+     */
+    final private function __clone()
+    {
+    }
 }

@@ -14,7 +14,7 @@ namespace DBD\Common;
 interface Instantiatable
 {
 	/**
-	 * @return mixed | static
+	 * @return static
 	 */
-	public static function me();
+	public static function me(): Instantiatable;
 }
