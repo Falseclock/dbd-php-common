@@ -76,7 +76,7 @@ abstract class Singleton implements Instantiatable
     /**
      * do not clone me
      */
-    final private function __clone()
+    private function __clone()
     {
     }
 }
